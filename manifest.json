@@ -1,0 +1,32 @@
+{
+	"manifest_version": 3,
+
+	"name": "Content Bookmark",
+	"description": "Add bookmarks inside pages",
+	"version": "1.0",
+	"icons": {
+		"128": "icon.png"
+	},
+	"background": {
+		"service_worker": "background.js",
+		"type": "module"
+	},
+	"options_ui": {
+		"page": "options/options.html",
+		"open_in_tab": true
+	},
+	"web_accessible_resources": [
+		{
+			"resources": [
+                "helper/cloneFunction.js"
+			],
+			"matches": ["<all_urls>"]
+		}
+	],
+	"minimum_chrome_version": "92",
+	"action": {
+		"default_icon": "icon.png"
+	},
+	"permissions": ["tabs", "scripting", "storage", "contextMenus"],
+	"host_permissions": ["<all_urls>"]
+}
