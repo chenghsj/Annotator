@@ -1,0 +1,91 @@
+.ct_bks {
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    background: rgb(0, 28, 243, 52%);  
+    right:0; 
+    cursor: pointer;
+}
+
+.ct_bks::after{
+    content: "";
+    position: absolute;
+    border-top: 6.5px solid transparent;
+    border-bottom: 6.5px solid transparent;
+    border-right: 8px solid rgb(0, 28, 243, 52%);
+    left: -8px;
+}
+
+.ct_bks_bg {
+    background: #adfff161;
+}
+
+.ct_bks_ip_box{
+    position: absolute;
+    height: 90px;
+    width: 150px;
+    right: 25px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px 1px #5252525e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ct_bks_ip_box textarea{
+    height: 55px;
+    width: 140px;
+    background: none;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    margin-top: 0;
+    resize: none;
+}
+
+.ct_bks_ip_box textarea:focus-visible{
+    outline: none;
+}
+
+.ct_bks_ip_box textarea:focus{
+    border: 1px solid rgb(0, 28, 243, 52%) !important;
+}
+
+.ct_bks_ip_box .ct_bks_btn_container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.ct_bks_btn_container button{
+    font-size: 12px;
+    width: 66px;
+    border: none;
+    border-radius: 4px;
+    margin: 0;
+    color: white;
+}
+
+#ct_bks_tt_y {
+    background: rgb(0, 28, 243, 52%);
+}
+
+#ct_bks_tt_y:hover {
+    background: rgba(0, 28, 243, 0.65);
+}
+
+#ct_bks_tt_y:active {
+    background: rgba(0, 28, 243, 0.75);
+}
+
+#ct_bks_tt_n {
+    background: rgba(100, 100, 100, 0.52);
+}
+
+#ct_bks_tt_n:hover {
+    background: rgba(100, 100, 100, 0.65);
+}
+#ct_bks_tt_n:active {
+    background: rgba(100, 100, 100, 0.80);
+}

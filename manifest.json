@@ -18,7 +18,9 @@
 	"web_accessible_resources": [
 		{
 			"resources": [
-                "helper/cloneFunction.js",
+				"inject/memoInputBox.js",
+				"inject/findDOMPositions.js",
+				"helper/cloneFunction.js",
 				"helper/detectNodeType.js"
 			],
 			"matches": ["<all_urls>"]
