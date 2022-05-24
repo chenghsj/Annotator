@@ -1,6 +1,4 @@
-function encodeString(str) {
-	return [...new TextEncoder().encode(str)];
-}
+import Bookmark from "./bookmark.js";
 
 function findDOMPositions({ bookmarkList, currentURL }) {
 	let markList;
@@ -19,31 +17,10 @@ function findDOMPositions({ bookmarkList, currentURL }) {
 			tempMarkList.forEach((content, idx) => {
 				if (content === encodedContent) {
 					if (!document.getElementById(key + encodedContent)) {
-						let bookmark = document.createElement("div");
-						bookmark.id = key + encodedContent;
-						bookmark.classList.add("ct_bks");
-						document.body.append(bookmark);
-						bookmark.style.top = `${getOffsetTop(item) + 100}px`;
-						bookmark.addEventListener("click", async function (e) {
-							memoInputBox = await MemoInputBox({
-								event: e,
-								top: bookmark.style.top,
-								tagName: key,
-								encodedContent,
-							});
-							// memoInput(e, bookmark.style.top);
-						});
-						bookmark.addEventListener("mouseenter", function () {
-							if (memoInputBox?.visible) return;
-							contentBookmarkMouseenterTimeoutId = setTimeout(() => {
-								console.log("mouse enter");
-								console.log(memoInputBox);
-							}, delay);
-						});
-						bookmark.addEventListener("mouseleave", function () {
-							if (contentBookmarkMouseenterTimeoutId) {
-								clearTimeout(contentBookmarkMouseenterTimeoutId);
-							}
+						new Bookmark({
+							key,
+							encodedContent,
+							top: getOffsetTop(item) + 100,
 						});
 					}
 					item.classList.add("ct_bks_bg", encodedContent);

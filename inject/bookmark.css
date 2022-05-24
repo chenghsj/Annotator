@@ -17,32 +17,41 @@
 }
 
 .ct_bks_bg {
-    background: #adfff161;
+    /* background: #adfff161; */
 }
 
 .ct_bks_ip_box{
     position: absolute;
-    height: 90px;
-    width: 150px;
+    height: 140px;
+    width: 200px;
     right: 25px;
-    background: white;
+    background: #ffff8a;
     border-radius: 5px;
     box-shadow: 1px 1px 4px 1px #5252525e;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;;
+}
+
+.ct_bks_ip_box.ct_bks_mm_box{
+    height: fit-content;
+    width: fit-content;
+    max-width: 200px;
+    padding: 10px;
+    background: #ffff8a;
 }
 
 .ct_bks_ip_box textarea{
-    height: 55px;
-    width: 140px;
-    background: none;
-    border: 1px solid gray;
+    height: 100px;
+    width: 180px;
+    background: transparent !important;
+    border: none !important;
     border-radius: 5px;
     padding: 5px;
-    margin: 5px;
-    margin-top: 0;
+    margin: 0 auto;
     resize: none;
+    box-sizing: border-box;
+    box-shadow: inset 1px 1px 5px 0px #a8a8a8 !important;
 }
 
 .ct_bks_ip_box textarea:focus-visible{
@@ -50,7 +59,6 @@
 }
 
 .ct_bks_ip_box textarea:focus{
-    border: 1px solid rgb(0, 28, 243, 52%) !important;
 }
 
 .ct_bks_ip_box .ct_bks_btn_container {
@@ -60,32 +68,33 @@
 
 .ct_bks_btn_container button{
     font-size: 12px;
-    width: 66px;
     border: none;
     border-radius: 4px;
     margin: 0;
     color: white;
+    border-radius: 20px;
+    width: 60px;
 }
 
 #ct_bks_tt_y {
-    background: rgb(0, 28, 243, 52%);
+    background: rgb(118 134 255);;
 }
 
 #ct_bks_tt_y:hover {
-    background: rgba(0, 28, 243, 0.65);
+    background: rgb(92 111 255);
 }
 
 #ct_bks_tt_y:active {
-    background: rgba(0, 28, 243, 0.75);
+    background:  rgb(80 97 230);
 }
 
 #ct_bks_tt_n {
-    background: rgba(100, 100, 100, 0.52);
+    background: rgb(164 164 164);
 }
 
 #ct_bks_tt_n:hover {
-    background: rgba(100, 100, 100, 0.65);
+    background: rgb(132, 132, 132);
 }
 #ct_bks_tt_n:active {
-    background: rgba(100, 100, 100, 0.80);
+    background: rgb(117, 117, 117);
 }

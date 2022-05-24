@@ -5,27 +5,11 @@
 // key === 'l' or e.code === 'KeyL' or keyCode: 76
 
 /**
- [
-    {
-      markList: {
-        'p': [content1, content2, ...],
-        'a': [content1, content2, ...],
-      }
-      markList: [
-        { encodedContent, type },
-        { encodedContent, type },
-      ],
-      title,
-      url,
-      memo,
-      selections,
-    },
-  ];
+ * @global
  */
-
 var bookmarkList,
-	currentURL = window.location.href,
 	bookmarkIdx,
+	currentURL = window.location.href,
 	scrollPositions = [],
 	scrollPositionIdx = -1;
 
@@ -35,7 +19,7 @@ var isMac = window.navigator.platform.toLowerCase().indexOf("mac") >= 0,
 var contentBookmarkTimeoutId = null,
 	contentBookmarkScrollTimeoutId = null,
 	contentBookmarkMouseenterTimeoutId = null,
-	delay = 300;
+	delay = 200;
 
 var selectedText = "",
 	prevSelectedText = "";
@@ -44,20 +28,10 @@ var bookmarkStyle = {
 	background: "#fffdb1",
 };
 
-var memoInputBox, savedMemo;
-
 /**
- *
- * @param {object} args
- * @param {HTMLElementEventMap} args.event
- * @param {string} args.top scrollTop position
- * @returns
+ * @instance MemoInputBox
  */
-async function MemoInputBox(args) {
-	let memoInputBoxSrc = chrome.runtime.getURL("inject/memoInputBox.js"),
-		memoInputBox = await import(memoInputBoxSrc);
-	return new memoInputBox.default(args);
-}
+var memoInputBox, memoBox, savedMemo;
 
 function getAllStorageLocalData() {
 	return new Promise((resolve, reject) => {
@@ -240,14 +214,14 @@ window.addEventListener("scroll", function (e) {
 
 window.addEventListener("keydown", function (e) {
 	if (!scrollPositions) return;
-	if (e.ctrlKey && e.altKey && e.code === "ArrowRight") {
+	if (e.ctrlKey && e.shiftKey && e.code === "ArrowRight") {
 		scrollPositionIdx++;
 		if (scrollPositionIdx >= scrollPositions.length) {
 			scrollPositionIdx = 0;
 		}
 		window.scrollTo({ top: scrollPositions[scrollPositionIdx], behavior: "smooth" });
 	}
-	if (e.ctrlKey && e.altKey && e.code === "ArrowLeft") {
+	if (e.ctrlKey && e.shiftKey && e.code === "ArrowLeft") {
 		scrollPositionIdx--;
 		if (scrollPositionIdx < 0) {
 			scrollPositionIdx = scrollPositions.length - 1;
@@ -275,9 +249,14 @@ window.addEventListener("mouseup", function (e) {
 });
 
 window.addEventListener("save_content_bookmark_memo", function (e) {
-	console.log(e.detail);
-	savedMemo = e.detail.memo;
+	// console.log(e.detail);
 	console.log(memoInputBox.bookmarkMessage);
+	savedMemo = e.detail.memo;
+	let { tagName, encodedContent } = memoInputBox.bookmarkMessage;
+	let memoIdx = bookmarkList[bookmarkIdx].markList[tagName].indexOf(encodedContent);
+	bookmarkList[bookmarkIdx].memo[tagName][memoIdx] = savedMemo;
+	chrome.storage.local.set({ bookmarkList });
+	console.log("Save to Storage", bookmarkList);
 });
 
 function getSelectedText() {

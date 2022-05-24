@@ -19,6 +19,7 @@
 		{
 			"resources": [
 				"inject/memoInputBox.js",
+				"inject/bookmark.js",
 				"inject/findDOMPositions.js",
 				"helper/cloneFunction.js",
 				"helper/detectNodeType.js"
