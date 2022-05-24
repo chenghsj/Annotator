@@ -1,5 +1,6 @@
 html {
-    max-height: 500px;
+    height: fit-content;
+    max-height: 400px;
 }
 body{ 
     font-family: arial,sans-serif;
@@ -81,16 +82,12 @@ h3 , span {
     width: 90%;
 }
 
-.ct_bk_num {
-    line-height: 20px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
+.ct_bk_icon {
     width: 20px;
     height: 20px;
-    background: rgb(129, 144, 255);
-    border-radius: 28px;
     margin: 0 5px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
 }
 
 .ct_bk_rm_btn{

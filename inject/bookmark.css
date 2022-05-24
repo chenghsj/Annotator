@@ -22,10 +22,10 @@
 
 .ct_bks_ip_box{
     position: absolute;
-    height: 140px;
+    height: 150px;
     width: 200px;
     right: 25px;
-    background: #ffff8a;
+    background: white;
     border-radius: 5px;
     box-shadow: 1px 1px 4px 1px #5252525e;
     display: flex;

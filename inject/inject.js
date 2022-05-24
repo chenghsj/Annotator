@@ -87,7 +87,7 @@ async function bookMarkInit() {
 	bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
 	if (bookmarkIdx < 0) return;
 
-	scrollPositions = await findDOMPositions({ bookmarkList, currentURL });
+	scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
 	// scrollPositions = findDOMPositions();
 	if (scrollPositions.length === 0) {
 		setTimeout(() => {
@@ -105,11 +105,31 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 	return true;
 });
 
+function removeBookMark(tagName, encodedContent) {
+	if (document.getElementById(tagName + encodedContent)) {
+		document.getElementById(tagName + encodedContent).remove();
+		document
+			.getElementsByClassName(encodedContent)[0]
+			.classList.remove("ct_bks_bg", encodedContent);
+	}
+}
+
+chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+	let items = await getAllStorageLocalData();
+	bookmarkList = items.bookmarkList || [];
+	console.log(bookmarkList);
+	if (message.updateTab) {
+		let { tagName, encodedContent } = message.data;
+		removeBookMark(tagName, encodedContent);
+	}
+	sendResponse();
+});
+
 chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
 	let items = await getAllStorageLocalData();
 	bookmarkList = items.bookmarkList || [];
 	if (message.addBookMark) {
-		// let tab = message.tab;
+		let tab = message.tab;
 		let encodedContent;
 		let selectedString = window.getSelection().toString();
 		if (!selectedString) {
@@ -145,11 +165,8 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 					markList[selectedElement.tagName].splice(encodedIdx, 1);
 					memo[selectedElement.tagName].splice(encodedIdx, 1);
 					selectedElement.classList.remove("ct_bks_bg");
-					document.getElementById(selectedElement.tagName + encodedContent).remove();
-					document
-						.getElementsByClassName(encodedContent)[0]
-						.classList.remove("ct_bks_bg", encodedContent);
-					scrollPositions = await findDOMPositions({ bookmarkList, currentURL });
+					removeBookMark(selectedElement.tagName, encodedContent);
+					scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
 					memoInputBox?.remove();
 					// alert("This content had been added already.");
 					if (markList[selectedElement.tagName].length === 0) {
@@ -168,11 +185,12 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 			bookmarkList.push({
 				title: document.querySelector("title").innerText,
 				url: currentURL,
+				iconUrl: tab.favIconUrl,
 				markList: { [selectedElement.tagName]: [encodedContent] },
 				memo: { [selectedElement.tagName]: [null] },
 			});
 		}
-		scrollPositions = await findDOMPositions({ bookmarkList, currentURL });
+		scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
 		chrome.storage.local.set({ bookmarkList });
 		console.log(scrollPositions);
 		console.log("Save to Storage", bookmarkList);

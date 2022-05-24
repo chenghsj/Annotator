@@ -1,8 +1,8 @@
 import Bookmark from "./bookmark.js";
 
-function findDOMPositions({ bookmarkList, currentURL }) {
+function findDOMPositions({ bookmarkList, tabUrl }) {
 	let markList;
-	bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
+	bookmarkIdx = bookmarkList.findIndex((item) => item.url === tabUrl);
 	if (bookmarkIdx < 0) return;
 	markList = bookmarkList[bookmarkIdx].markList;
 	let positions = [];
@@ -16,13 +16,14 @@ function findDOMPositions({ bookmarkList, currentURL }) {
 			].join("");
 			tempMarkList.forEach((content, idx) => {
 				if (content === encodedContent) {
-					if (!document.getElementById(key + encodedContent)) {
-						new Bookmark({
-							key,
-							encodedContent,
-							top: getOffsetTop(item) + 100,
-						});
+					if (document.getElementById(key + encodedContent)) {
+						document.getElementById(key + encodedContent).remove();
 					}
+					new Bookmark({
+						key,
+						encodedContent,
+						top: getOffsetTop(item) + 100,
+					});
 					item.classList.add("ct_bks_bg", encodedContent);
 					positions.push(getOffsetTop(item));
 					tempMarkList[idx] = null;
