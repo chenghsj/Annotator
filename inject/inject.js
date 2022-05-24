@@ -240,14 +240,14 @@ window.addEventListener("scroll", function (e) {
 
 window.addEventListener("keydown", function (e) {
 	if (!scrollPositions) return;
-	if (e.ctrlKey && e.altKey && e.code === "ArrowRight") {
+	if (e.ctrlKey && e.shiftKey && e.code === "ArrowRight") {
 		scrollPositionIdx++;
 		if (scrollPositionIdx >= scrollPositions.length) {
 			scrollPositionIdx = 0;
 		}
 		window.scrollTo({ top: scrollPositions[scrollPositionIdx], behavior: "smooth" });
 	}
-	if (e.ctrlKey && e.altKey && e.code === "ArrowLeft") {
+	if (e.ctrlKey && e.shiftKey && e.code === "ArrowLeft") {
 		scrollPositionIdx--;
 		if (scrollPositionIdx < 0) {
 			scrollPositionIdx = scrollPositions.length - 1;
