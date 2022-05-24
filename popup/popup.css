@@ -1,0 +1,114 @@
+html {
+    max-height: 500px;
+}
+body{ 
+    font-family: arial,sans-serif;
+    overflow-y: scroll;
+    width: 300px;
+    height: fit-content;
+    max-height: 500px;
+    box-sizing: border-box;
+}
+
+ul {
+    width: 100%;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+h3 {
+    cursor: pointer;
+    width: 80%;
+    margin: 5px;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    padding: 3px;
+    padding-left: 5px;
+    margin-left: 30px;
+    cursor: default;
+}
+
+li:hover {
+    background: #dbdbdb;
+}
+
+h3 , span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;    
+}
+
+.ct_bk_search_container {
+    height: 25px;
+}
+
+#ct_bk_search {
+    height: 100%;
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid rgb(129, 144, 255);
+}
+
+#ct_bk_search:focus-visible {
+    outline: none;
+    border: 2px solid rgb(129, 144, 255);
+}
+
+.bk_ul_container {
+    margin-top: 10px;
+}
+
+.bk_ul_tt_container {
+    margin-top: -5px;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    padding-left: 0;
+}
+
+.bk_ul_tt_container:hover {
+    background: #dbdbdb;
+    border-radius: 5px;
+}
+
+.ct_bk_memo {
+    width: 90%;
+}
+
+.ct_bk_num {
+    line-height: 20px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    background: rgb(129, 144, 255);
+    border-radius: 28px;
+    margin: 0 5px;
+}
+
+.ct_bk_rm_btn{
+    width: 22px;
+    height: 22px;
+    fill:#7c7c7c;
+    visibility: hidden;
+    cursor: pointer;
+}
+
+.ct_bk_rm_btn:hover{
+    /* visibility: visible; */
+    fill:#2e2e2e !important;
+    border-radius: 5px;
+    background: #ababab;
+    transform: scale(0.9);
+}
+
+.ct_bk_rm_btn.show_rm_btn {
+    visibility: visible
+}
