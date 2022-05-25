@@ -35,7 +35,7 @@ li {
 button {
     border-radius: 25px;
     outline: none;
-    background: rgb(0, 28, 243, 52%);
+    background: #7d8cff;
     border: none;
     color: white;
     padding: 3px 10px;
@@ -44,15 +44,22 @@ button {
 }
 
 button:hover{
-    background: rgba(0, 28, 243, 0.65)
+    background: #697bff;
 }
 
 button:active{
-    background: rgba(0, 28, 243, 0.75)
+    background: #5e6ee2;
+}
+
+.options_container {
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #reload_container {
-    position: absolute;
+    /* position: absolute; */
     bottom: 5%;
     display: flex;
     flex-direction: column;

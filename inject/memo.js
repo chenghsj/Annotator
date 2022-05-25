@@ -77,7 +77,7 @@ class MemoBox {
 		this.memoBox.classList.add("ct_bks_ip_box", "ct_bks_mm_box");
 		this.memoBox.style.top = `${top}px`;
 		if (this.memo == null) {
-			this.memo = "Add a memo...";
+			this.memo = "memo...";
 			this.memoBox.style.color = "darkgray";
 		}
 		this.memoBox.innerHTML += `<span>${this.memo}</span>`;

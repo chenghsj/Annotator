@@ -7,30 +7,30 @@
 <link rel="stylesheet" href="options.css">
 
 <body>
-  <div>
+  <div class="options_container">
     <div>
       <h3>Background color</h3>
       <ul>
-        <li><span>Content&nbsp;:&emsp;</span><input id="ct_bg_color" type="color" value="" /></li>
-        <li><span>Bookmark&nbsp;:&emsp;</span><input id="bm_bg_color" type="color" value="" /></li>
-        <li><span>Memo&nbsp;:&emsp;</span><input id="mm_bg_color" type="color" value="" /></li>
+        <li><span>Content&nbsp;:&emsp;</span><input id="ct_bg_color" type="color" ></li>
+        <li><span>Bookmark&nbsp;:&emsp;</span><input id="bm_bg_color" type="color" ></li>
+        <li><span>Memo&nbsp;:&emsp;</span><input id="mm_bg_color" type="color" ></li>
       </ul>
+      <div id="btn_container">
+        <button id="save">Save</button>
+        <div id="status"></div>
+      </div>
     </div>
-    <div id="btn_container">
-      <button id="save">Save</button>
-      <div id="status"></div>
+    
+    <div id="reload_container">
+      <h3>
+        Reload pages on your own or click button below:
+      </h3>
+      <select id="reload_type">
+        <option value="current">Current window</option>
+        <option value="all">All windows</option>
+      </select>
+      <button id="reload_all">Reload</button>
     </div>
-  </div>
-
-  <div id="reload_container">
-    <h3>
-      Reload pages on your own or click button below:
-    </h3>
-    <select id="reload_type">
-      <option value="current">Current window</option>
-      <option value="all">All windows</option>
-    </select>
-    <button id="reload_all">Reload</button>
   </div>
 
 

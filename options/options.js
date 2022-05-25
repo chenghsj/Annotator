@@ -32,14 +32,12 @@ inputList.forEach((el) => {
 });
 
 function content_bookmark_init() {
-  chrome.storage.local.get({ colorList: { content_color: "", bookmark_color: "", memo_color: "" } }, function (items) {
+  chrome.storage.local.get({ colorList: { ct_bg_color: "#adfff1", bm_bg_color: "#697bff", mm_bg_color: "#ffff8a" } }, function (items) {
     console.log(items);
     inputList.forEach((el) => {
-      el.value = "#FFFFFF";
+      el.value = items.colorList[el.id];
     });
-  });
-  inputList.forEach((el) => {
-    el.value = "#FFFFFF";
+    colorList = items.colorList;
   });
 }
 function save_options() {
@@ -91,25 +89,25 @@ function save_options() {
 // }
 
 function reload_tabs() {
-	if (reloadType.value == "current") {
-		confirmMessage.textContent = "Are you sure you want to reload all pages of current window?";
-	} else {
-		confirmMessage.textContent = "Are you sure you want to reload all pages of all windows?";
-	}
-	confirmPageMask.style.display = "block";
+  if (reloadType.value == "current") {
+    confirmMessage.textContent = "Are you sure you want to reload all pages of current window?";
+  } else {
+    confirmMessage.textContent = "Are you sure you want to reload all pages of all windows?";
+  }
+  confirmPageMask.style.display = "block";
 
-	confirmBtn.addEventListener("click", function () {
-		let query = reloadType.value == "current" ? { currentWindow: true } : {};
-		chrome.tabs.query(query, function (tabs) {
-			console.log(tabs);
-			tabs.forEach((tab) => {
-				chrome.tabs.reload(tab.id);
-			});
-		});
-	});
-	cancelBtn.addEventListener("click", function () {
-		confirmPageMask.style.display = "none";
-	});
+  confirmBtn.addEventListener("click", function () {
+    let query = reloadType.value == "current" ? { currentWindow: true } : {};
+    chrome.tabs.query(query, function (tabs) {
+      console.log(tabs);
+      tabs.forEach((tab) => {
+        chrome.tabs.reload(tab.id);
+      });
+    });
+  });
+  cancelBtn.addEventListener("click", function () {
+    confirmPageMask.style.display = "none";
+  });
 }
 
 document.addEventListener("DOMContentLoaded", content_bookmark_init);

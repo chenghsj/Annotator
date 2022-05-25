@@ -5,7 +5,7 @@ html {
 body{ 
     font-family: arial,sans-serif;
     overflow-y: scroll;
-    width: 300px;
+    width: 350px;
     height: fit-content;
     max-height: 500px;
     box-sizing: border-box;
@@ -18,7 +18,7 @@ ul {
     margin: 0;
 }
 
-h3 {
+h4 {
     cursor: pointer;
     width: 80%;
     margin: 5px;
@@ -30,16 +30,15 @@ li {
     justify-content: space-between;
     border-radius: 5px;
     padding: 3px;
-    padding-left: 5px;
-    margin-left: 30px;
+    padding-left: 30px;
     cursor: default;
 }
 
 li:hover {
-    background: #dbdbdb;
+    background: #e3e3e3;;
 }
 
-h3 , span {
+h4 , span {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;    
@@ -69,6 +68,7 @@ h3 , span {
     margin-top: -5px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 3px;
     padding-left: 0;
 }
@@ -82,12 +82,14 @@ h3 , span {
     width: 90%;
 }
 
-.ct_bk_icon {
-    width: 20px;
-    height: 20px;
+.ct_bk_icon, .ct_bk_blank_icon {
+    width: 18px;
+    height: 18px;
     margin: 0 5px;
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
+}
+
+.ct_bk_blank_icon {
+    transform: scale(1.5);
 }
 
 .ct_bk_rm_btn{

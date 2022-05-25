@@ -13,12 +13,12 @@
 	},
 	"options_ui": {
 		"page": "options/options.html",
-		"open_in_tab": false
+		"open_in_tab": true
 	},
 	"web_accessible_resources": [
 		{
 			"resources": [
-				"inject/memoInputBox.js",
+				"inject/memo.js",
 				"inject/bookmark.js",
 				"inject/findDOMPositions.js",
 				"helper/cloneFunction.js",

@@ -8,24 +8,24 @@
  * @global
  */
 var bookmarkList,
-	bookmarkIdx,
-	currentURL = window.location.href,
-	scrollPositions = [],
-	scrollPositionIdx = -1;
+  bookmarkIdx,
+  currentURL = window.location.href,
+  scrollPositions = [],
+  scrollPositionIdx = -1;
 
 var isMac = window.navigator.platform.toLowerCase().indexOf("mac") >= 0,
-	keyBinding = (e) => (isMac ? e.metaKey && e.altKey : e.ctrlKey && e.altKey);
+  keyBinding = (e) => (isMac ? e.metaKey && e.altKey : e.ctrlKey && e.altKey);
 
 var contentBookmarkTimeoutId = null,
-	contentBookmarkScrollTimeoutId = null,
-	contentBookmarkMouseenterTimeoutId = null,
-	delay = 200;
+  contentBookmarkScrollTimeoutId = null,
+  contentBookmarkMouseenterTimeoutId = null,
+  delay = 200;
 
 var selectedText = "",
-	prevSelectedText = "";
+  prevSelectedText = "";
 
 var bookmarkStyle = {
-	background: "#fffdb1",
+  background: "#fffdb1",
 };
 
 /**
@@ -34,18 +34,18 @@ var bookmarkStyle = {
 var memoInputBox, memoBox, savedMemo;
 
 function getAllStorageLocalData() {
-	return new Promise((resolve, reject) => {
-		chrome.storage.local.get(null, (items) => {
-			if (chrome.runtime.lastError) {
-				return reject(chrome.runtime.lastError);
-			}
-			resolve(items);
-		});
-	});
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(null, (items) => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError);
+      }
+      resolve(items);
+    });
+  });
 }
 
 function encodeString(str) {
-	return [...new TextEncoder().encode(str)];
+  return [...new TextEncoder().encode(str)];
 }
 
 /**
@@ -53,12 +53,12 @@ function encodeString(str) {
  * @returns
  */
 function getOffsetTop(element) {
-	let offsetTop = 0;
-	while (element) {
-		offsetTop += element.offsetTop;
-		element = element.offsetParent;
-	}
-	return offsetTop - 100;
+  let offsetTop = 0;
+  while (element) {
+    offsetTop += element.offsetTop;
+    element = element.offsetParent;
+  }
+  return offsetTop - 100;
 }
 
 /**
@@ -67,247 +67,256 @@ function getOffsetTop(element) {
  * @param {string} args.type
  */
 function detectNodeType({ node, type }) {
-	while (node.parentNode) {
-		if (node.tagName === type) return true;
-		node = node.parentNode;
-	}
-	return false;
+  while (node.parentNode) {
+    if (node.tagName === type) return true;
+    node = node.parentNode;
+  }
+  return false;
 }
 
 async function findDOMPositions(args) {
-	let findDOMPositionsSrc = chrome.runtime.getURL("inject/findDOMPositions.js"),
-		findDOMPositions = await import(findDOMPositionsSrc);
-	return findDOMPositions.default(args);
+  let findDOMPositionsSrc = chrome.runtime.getURL("inject/findDOMPositions.js"),
+    findDOMPositions = await import(findDOMPositionsSrc);
+  return findDOMPositions.default(args);
 }
 
 async function bookMarkInit() {
-	let items = await getAllStorageLocalData();
-	bookmarkList = items.bookmarkList || [];
-	console.log("Get Storage Data: ", bookmarkList);
-	bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
-	if (bookmarkIdx < 0) return;
+  let items = await getAllStorageLocalData();
+  bookmarkList = items.bookmarkList || [];
+  console.log("Get Storage Data: ", bookmarkList);
+  bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
+  if (bookmarkIdx < 0) return;
 
-	scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
-	// scrollPositions = findDOMPositions();
-	if (scrollPositions.length === 0) {
-		setTimeout(() => {
-			bookMarkInit();
-		}, 200);
-	}
-	console.log(scrollPositions);
+  scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
+  // scrollPositions = findDOMPositions();
+  if (scrollPositions.length === 0) {
+    setTimeout(() => {
+      bookMarkInit();
+    }, 200);
+  }
+  console.log(scrollPositions);
 }
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-	if (message.message === "SAVE_MEMO") {
-		console.log(message.memo);
-	}
-	sendResponse();
-	return true;
+  if (message.message === "SAVE_MEMO") {
+    console.log(message.memo);
+  }
+  sendResponse();
+  return true;
 });
 
-function removeBookMark(tagName, encodedContent) {
-	if (document.getElementById(tagName + encodedContent)) {
-		document.getElementById(tagName + encodedContent).remove();
-		document
-			.getElementsByClassName(encodedContent)[0]
-			.classList.remove("ct_bks_bg", encodedContent);
-	}
+function removeBookMark({ tagName, encodedContent, all }) {
+  if (all) {
+    let marks = [...document.getElementsByClassName("ct_bks")];
+    let bgAttrs = [...document.getElementsByClassName("ct_bks_bg")];
+    marks.forEach((mark) => {
+      mark.remove();
+    });
+    bgAttrs.forEach((attr) => {
+      attr.classList.remove("ct_bks_bg");
+      document.querySelectorAll("[data-encoded-content]").forEach((node) => {
+        node.classList.remove("ct_bks_bg");
+        delete node.dataset.encodedContent;
+      });
+    });
+    return;
+  }
+  if (document.getElementById(tagName + encodedContent)) {
+    document.getElementById(tagName + encodedContent).remove();
+    let bgAttr = document.querySelector(`[data-encoded-content='${encodedContent}']`);
+    bgAttr.classList.remove("ct_bks_bg");
+    delete bgAttr.dataset.encodedContent;
+  }
 }
 
 chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
-	let items = await getAllStorageLocalData();
-	bookmarkList = items.bookmarkList || [];
-	console.log(bookmarkList);
-	if (message.updateTab) {
-		let { tagName, encodedContent } = message.data;
-		removeBookMark(tagName, encodedContent);
-	}
-	sendResponse();
+  let items = await getAllStorageLocalData();
+  bookmarkList = items.bookmarkList || [];
+  console.log(bookmarkList);
+  if (message.message === "UPDATE_TAB") {
+    if (message.data == null) {
+      removeBookMark({ all: true });
+    } else {
+      let { tagName, encodedContent } = message.data;
+      removeBookMark({ tagName, encodedContent });
+    }
+  }
+  sendResponse();
 });
 
 chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
-	let items = await getAllStorageLocalData();
-	bookmarkList = items.bookmarkList || [];
-	if (message.addBookMark) {
-		let tab = message.tab;
-		let encodedContent;
-		let selectedString = window.getSelection().toString();
-		if (!selectedString) {
-			alert("Please select content outside the Iframe element");
-			return;
-		}
-		let selectedElement = window.getSelection().anchorNode.parentElement;
-		// preventing select any code element due to user may get the duplicate contents
-		let isCodeTag = detectNodeType({ node: selectedElement, type: "CODE" });
-		if (isCodeTag) {
-			alert("Please select content outside the Code element");
-			return;
-		}
-		let encodedSelectedContent = encodeString(selectedElement.innerText);
+  let items = await getAllStorageLocalData();
+  bookmarkList = items.bookmarkList || [];
+  if (message.addBookMark) {
+    let tab = message.tab;
+    let encodedContent;
+    let selectedString = window.getSelection().toString();
+    if (!selectedString) {
+      alert("Please select content outside the Iframe element");
+      return;
+    }
+    let selectedElement = window.getSelection().anchorNode.parentElement;
+    // preventing select any code element due to user may get the duplicate contents
+    let isCodeTag = detectNodeType({ node: selectedElement, type: "CODE" });
+    if (isCodeTag) {
+      alert("Please select content outside the Code element");
+      return;
+    }
+    let encodedSelectedContent = encodeString(selectedElement.innerText);
 
-		encodedContent = [
-			encodedSelectedContent.slice(0, 20).join(""),
-			encodedSelectedContent.slice(-20).join(""),
-		].join("");
-		bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
-		// check if url exists
-		if (bookmarkIdx >= 0) {
-			let markList = bookmarkList[bookmarkIdx].markList;
-			let memo = bookmarkList[bookmarkIdx].memo;
-			// check if tagName exists
-			if (markList[selectedElement.tagName]) {
-				let encodedIdx = markList[selectedElement.tagName].indexOf(encodedContent);
-				// check if encoded string exists
-				if (encodedIdx < 0) {
-					markList[selectedElement.tagName].push(encodedContent);
-					memo[selectedElement.tagName].push(null);
-				} else {
-					markList[selectedElement.tagName].splice(encodedIdx, 1);
-					memo[selectedElement.tagName].splice(encodedIdx, 1);
-					selectedElement.classList.remove("ct_bks_bg");
-					removeBookMark(selectedElement.tagName, encodedContent);
-					scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
-					memoInputBox?.remove();
-					// alert("This content had been added already.");
-					if (markList[selectedElement.tagName].length === 0) {
-						delete markList[selectedElement.tagName];
-						delete memo[selectedElement.tagName];
-					}
-					if (Object.keys(markList).length === 0) {
-						bookmarkList.splice(bookmarkIdx, 1);
-					}
-				}
-			} else {
-				markList[selectedElement.tagName] = [encodedContent];
-				memo[selectedElement.tagName] = [null];
-			}
-		} else {
-			bookmarkList.push({
-				title: document.querySelector("title").innerText,
-				url: currentURL,
-				iconUrl: tab.favIconUrl,
-				markList: { [selectedElement.tagName]: [encodedContent] },
-				memo: { [selectedElement.tagName]: [null] },
-			});
-		}
-		scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
-		chrome.storage.local.set({ bookmarkList });
-		console.log(scrollPositions);
-		console.log("Save to Storage", bookmarkList);
-	}
-	sendResponse();
+    encodedContent = [encodedSelectedContent.slice(0, 20).join(""), encodedSelectedContent.slice(-20).join("")].join("");
+    bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
+    // check if url exists
+    if (bookmarkIdx >= 0) {
+      let markList = bookmarkList[bookmarkIdx].markList;
+      let memo = bookmarkList[bookmarkIdx].memo;
+      // check if tagName exists
+      if (markList[selectedElement.tagName]) {
+        let encodedIdx = markList[selectedElement.tagName].indexOf(encodedContent);
+        // check if encoded string exists
+        if (encodedIdx < 0) {
+          markList[selectedElement.tagName].push(encodedContent);
+          memo[selectedElement.tagName].push(null);
+        } else {
+          markList[selectedElement.tagName].splice(encodedIdx, 1);
+          memo[selectedElement.tagName].splice(encodedIdx, 1);
+          selectedElement.classList.remove("ct_bks_bg");
+          removeBookMark({ tagName: selectedElement.tagName, encodedContent });
+          scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
+          memoInputBox?.remove();
+          // alert("This content had been added already.");
+          if (markList[selectedElement.tagName].length === 0) {
+            delete markList[selectedElement.tagName];
+            delete memo[selectedElement.tagName];
+          }
+          if (Object.keys(markList).length === 0) {
+            bookmarkList.splice(bookmarkIdx, 1);
+          }
+        }
+      } else {
+        markList[selectedElement.tagName] = [encodedContent];
+        memo[selectedElement.tagName] = [null];
+      }
+    } else {
+      bookmarkList.push({
+        title: document.querySelector("title").innerText,
+        url: currentURL,
+        iconUrl: tab.favIconUrl,
+        markList: { [selectedElement.tagName]: [encodedContent] },
+        memo: { [selectedElement.tagName]: [null] },
+      });
+    }
+    scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
+    chrome.storage.local.set({ bookmarkList });
+    console.log(scrollPositions);
+    console.log("Save to Storage", bookmarkList);
+  }
+  sendResponse();
 });
 
 window.addEventListener("scroll", function (e) {
-	if (!scrollPositions) return;
-	if (contentBookmarkScrollTimeoutId) {
-		clearTimeout(contentBookmarkScrollTimeoutId);
-	}
-	contentBookmarkScrollTimeoutId = setTimeout(function () {
-		let DOMScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-		let min = Number.POSITIVE_INFINITY;
-		let max = Number.NEGATIVE_INFINITY;
-		let absScrollPositions = scrollPositions.map((position) =>
-			Math.ceil(Math.abs(DOMScrollTop - position))
-		);
-		for (let value of absScrollPositions) {
-			min = Math.min(min, value);
-		}
-		for (let value of absScrollPositions) {
-			max = Math.max(max, value);
-		}
-		if (min > window.pageYOffset) {
-			scrollPositionIdx = -1;
-		} else if (
-			max < window.pageYOffset &&
-			window.pageYOffset > scrollPositions[scrollPositions.length - 1]
-		) {
-			scrollPositionIdx = scrollPositions.length;
-		} else {
-			scrollPositionIdx = absScrollPositions.indexOf(min);
-		}
-		console.log(min, max, scrollPositionIdx, scrollPositions);
-	}, delay);
+  if (!scrollPositions) return;
+  if (contentBookmarkScrollTimeoutId) {
+    clearTimeout(contentBookmarkScrollTimeoutId);
+  }
+  contentBookmarkScrollTimeoutId = setTimeout(function () {
+    let DOMScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    let min = Number.POSITIVE_INFINITY;
+    let max = Number.NEGATIVE_INFINITY;
+    let absScrollPositions = scrollPositions.map((position) => Math.ceil(Math.abs(DOMScrollTop - position)));
+    for (let value of absScrollPositions) {
+      min = Math.min(min, value);
+    }
+    for (let value of absScrollPositions) {
+      max = Math.max(max, value);
+    }
+    if (min > window.pageYOffset) {
+      scrollPositionIdx = -1;
+    } else if (max < window.pageYOffset && window.pageYOffset > scrollPositions[scrollPositions.length - 1]) {
+      scrollPositionIdx = scrollPositions.length;
+    } else {
+      scrollPositionIdx = absScrollPositions.indexOf(min);
+    }
+    console.log(min, max, scrollPositionIdx, scrollPositions);
+  }, delay);
 });
 
 window.addEventListener("keydown", function (e) {
-	if (!scrollPositions) return;
-	if (e.ctrlKey && e.shiftKey && e.code === "ArrowRight") {
-		scrollPositionIdx++;
-		if (scrollPositionIdx >= scrollPositions.length) {
-			scrollPositionIdx = 0;
-		}
-		window.scrollTo({ top: scrollPositions[scrollPositionIdx], behavior: "smooth" });
-	}
-	if (e.ctrlKey && e.shiftKey && e.code === "ArrowLeft") {
-		scrollPositionIdx--;
-		if (scrollPositionIdx < 0) {
-			scrollPositionIdx = scrollPositions.length - 1;
-		}
-		window.scrollTo({ top: scrollPositions[scrollPositionIdx], behavior: "smooth" });
-	}
+  if (!scrollPositions) return;
+  if (e.ctrlKey && e.shiftKey && e.code === "ArrowRight") {
+    scrollPositionIdx++;
+    if (scrollPositionIdx >= scrollPositions.length) {
+      scrollPositionIdx = 0;
+    }
+    window.scrollTo({ top: scrollPositions[scrollPositionIdx], behavior: "smooth" });
+  }
+  if (e.ctrlKey && e.shiftKey && e.code === "ArrowLeft") {
+    scrollPositionIdx--;
+    if (scrollPositionIdx < 0) {
+      scrollPositionIdx = scrollPositions.length - 1;
+    }
+    window.scrollTo({ top: scrollPositions[scrollPositionIdx], behavior: "smooth" });
+  }
 });
 
 window.addEventListener("resize", function () {
-	// scrollPositions = [];
-	if (contentBookmarkTimeoutId) {
-		clearTimeout(contentBookmarkTimeoutId);
-	}
-	contentBookmarkTimeoutId = setTimeout(function () {
-		bookMarkInit();
-		console.log(scrollPositions);
-	}, delay);
+  // scrollPositions = [];
+  if (contentBookmarkTimeoutId) {
+    clearTimeout(contentBookmarkTimeoutId);
+  }
+  contentBookmarkTimeoutId = setTimeout(function () {
+    bookMarkInit();
+    console.log(scrollPositions);
+  }, delay);
 });
 
 window.addEventListener("mouseup", function (e) {
-	memoInputBox?.remove();
-	// logSelection();
-	console.log("mouseup");
-	getSelectedText();
+  memoInputBox?.remove();
+  getSelectedText();
 });
 
 window.addEventListener("save_content_bookmark_memo", function (e) {
-	// console.log(e.detail);
-	console.log(memoInputBox.bookmarkMessage);
-	savedMemo = e.detail.memo;
-	let { tagName, encodedContent } = memoInputBox.bookmarkMessage;
-	let memoIdx = bookmarkList[bookmarkIdx].markList[tagName].indexOf(encodedContent);
-	bookmarkList[bookmarkIdx].memo[tagName][memoIdx] = savedMemo;
-	chrome.storage.local.set({ bookmarkList });
-	console.log("Save to Storage", bookmarkList);
+  // console.log(e.detail);
+  console.log(memoInputBox.bookmarkMessage);
+  savedMemo = e.detail.memo;
+  let { tagName, encodedContent } = memoInputBox.bookmarkMessage;
+  let memoIdx = bookmarkList[bookmarkIdx].markList[tagName].indexOf(encodedContent);
+  bookmarkList[bookmarkIdx].memo[tagName][memoIdx] = savedMemo;
+  chrome.storage.local.set({ bookmarkList });
+  console.log("Save to Storage", bookmarkList);
 });
 
 function getSelectedText() {
-	if (window.getSelection) {
-		selectedText = window.getSelection().toString();
-		if (window.getSelection().toString().replace(/\s/g, "") && selectedText !== prevSelectedText) {
-			console.log(window.getSelection().toString());
-			prevSelectedText = selectedText;
-		}
-		return;
-	} else if (document.selection) {
-		return document.selection.createRange().text;
-	}
-	return "";
+  if (window.getSelection) {
+    selectedText = window.getSelection().toString();
+    if (window.getSelection().toString().replace(/\s/g, "") && selectedText !== prevSelectedText) {
+      console.log(window.getSelection().toString());
+      prevSelectedText = selectedText;
+    }
+    return;
+  } else if (document.selection) {
+    return document.selection.createRange().text;
+  }
+  return "";
 }
 
 function logSelection(event) {
-	// Get Selection
-	sel = window.getSelection();
-	if (sel.rangeCount && sel.getRangeAt) {
-		range = sel.getRangeAt(0);
-	}
-	// Set design mode to on
-	document.designMode = "on";
-	if (range) {
-		sel.removeAllRanges();
-		sel.addRange(range);
-	}
-	console.log(sel.anchorNode);
-	// Colorize text
-	document.execCommand("backColor", false, "yellow");
-	// Set design mode to off
-	document.designMode = "off";
+  // Get Selection
+  sel = window.getSelection();
+  if (sel.rangeCount && sel.getRangeAt) {
+    range = sel.getRangeAt(0);
+  }
+  // Set design mode to on
+  document.designMode = "on";
+  if (range) {
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+  console.log(sel.anchorNode);
+  // Colorize text
+  document.execCommand("backColor", false, "yellow");
+  // Set design mode to off
+  document.designMode = "off";
 }
 
 bookMarkInit();

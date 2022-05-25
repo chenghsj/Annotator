@@ -1,4 +1,4 @@
-import { MemoInputBox, MemoBox } from "./memoInputBox.js";
+import { MemoInputBox, MemoBox } from "./memo.js";
 class Bookmark {
 	/**
 	 * @param {object} args

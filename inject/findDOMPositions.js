@@ -24,7 +24,8 @@ function findDOMPositions({ bookmarkList, tabUrl }) {
 						encodedContent,
 						top: getOffsetTop(item) + 100,
 					});
-					item.classList.add("ct_bks_bg", encodedContent);
+					item.classList.add("ct_bks_bg");
+					item.dataset.encodedContent = encodedContent;
 					positions.push(getOffsetTop(item));
 					tempMarkList[idx] = null;
 				}
