@@ -40,6 +40,7 @@
     max-width: 200px;
     padding: 10px;
     background: #ffff8a;
+    overflow-wrap: break-word;
 }
 
 .ct_bks_ip_box textarea{
