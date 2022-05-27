@@ -14,8 +14,10 @@ mark | shortcut |
 
 ### TODO
 
-* [ ] popup search filter
+* [X] popup search filter
 
 * [ ] selection icon besides cursor
 
-* [ ] options page preview
+* [X] options page preview
+  
+* [ ] popup memo clickable

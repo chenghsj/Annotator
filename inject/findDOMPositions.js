@@ -6,9 +6,9 @@ function findDOMPositions({ bookmarkList, tabUrl }) {
 	if (bookmarkIdx < 0) return;
 	markList = bookmarkList[bookmarkIdx].markList;
 	let positions = [];
-	for (let key in markList) {
-		let DOMqueryList = [...document.querySelectorAll(key)];
-		let tempMarkList = [...markList[key]];
+	for (let tagName in markList) {
+		let DOMqueryList = [...document.querySelectorAll(tagName)];
+		let tempMarkList = [...markList[tagName]];
 		DOMqueryList.forEach((item) => {
 			let encodedContent = [
 				encodeString(item.innerText).slice(0, 20).join(""),
@@ -16,11 +16,11 @@ function findDOMPositions({ bookmarkList, tabUrl }) {
 			].join("");
 			tempMarkList.forEach((content, idx) => {
 				if (content === encodedContent) {
-					if (document.getElementById(key + encodedContent)) {
-						document.getElementById(key + encodedContent).remove();
+					if (document.getElementById(tagName + encodedContent)) {
+						document.getElementById(tagName + encodedContent).remove();
 					}
 					new Bookmark({
-						key,
+						tagName,
 						encodedContent,
 						top: getOffsetTop(item) + 100,
 					});

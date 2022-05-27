@@ -33,5 +33,12 @@
 		"default_icon": "icon.png"
 	},
 	"permissions": ["tabs", "scripting", "storage", "contextMenus"],
-	"host_permissions": ["<all_urls>"]
+	"host_permissions": ["<all_urls>"],
+	"commands": {
+		"_execute_action": {
+			"suggested_key": {
+				"windows": "Ctrl+Shift+Up"
+			}
+		}
+	}
 }
