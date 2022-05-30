@@ -7,7 +7,7 @@
     cursor: pointer;
 }
 
-.ct_bks::after{
+.ct_bks span{
     content: "";
     position: absolute;
     border-top: 6.5px solid transparent;

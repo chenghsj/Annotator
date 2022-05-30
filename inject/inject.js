@@ -25,6 +25,8 @@ var bookmarkStyle = {
 
 var sendMessageList;
 
+var bm_bg_color, ct_bg_color, mm_bg_color;
+
 /**
  * @instance MemoInputBox
  */
@@ -78,6 +80,11 @@ async function cursorIcon(args) {
 
 async function bookmarkInit() {
 	let items = await getAllStorageLocalData();
+
+	bm_bg_color = items.colorList.bm_bg_color || "#808eff";
+	ct_bg_color = items.colorList.ct_bg_color || "#e5fffb";
+	mm_bg_color = items.colorList.mm_bg_color || "#ffff8a";
+
 	bookmarkList = items.bookmarkList || [];
 	console.log("Get Storage Data: ", bookmarkList);
 	bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
@@ -96,7 +103,7 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 	return true;
 });
 
-// remove bookmark and background color
+// remove bookmark and content background color
 async function removeBookMark({ tagName, encodedContent, all, url }) {
 	if (all) {
 		let marks = [...document.getElementsByClassName("ct_bks")];
@@ -106,8 +113,10 @@ async function removeBookMark({ tagName, encodedContent, all, url }) {
 		});
 		bgAttrs.forEach((attr) => {
 			attr.classList.remove("ct_bks_bg");
+			attr.style.background = "inherit";
 			document.querySelectorAll("[data-encoded-content]").forEach((node) => {
 				node.classList.remove("ct_bks_bg");
+				node.style.background = "inherit";
 				delete node.dataset.encodedContent;
 			});
 		});
@@ -116,6 +125,7 @@ async function removeBookMark({ tagName, encodedContent, all, url }) {
 		document.getElementById(tagName + encodedContent).remove();
 		let bgAttr = document.querySelector(`[data-encoded-content='${encodedContent}']`);
 		bgAttr.classList.remove("ct_bks_bg");
+		bgAttr.style.background = "inherit";
 		delete bgAttr.dataset.encodedContent;
 	}
 	memoInputBox?.remove();

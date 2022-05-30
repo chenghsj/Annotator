@@ -30,8 +30,10 @@ function findDOMPositions({ bookmarkList, tabUrl, contentFromPopup }) {
 						tagName,
 						encodedContent,
 						top: getOffsetTop(item) + 100,
+						color: bm_bg_color,
 					});
 					item.classList.add("ct_bks_bg");
+					item.style.background = ct_bg_color;
 					item.dataset.encodedContent = encodedContent;
 					positions.push(getOffsetTop(item));
 					tempMarkList[idx] = null;

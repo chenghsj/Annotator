@@ -6,15 +6,15 @@ class MemoInputBox {
 	 * @param {string} args.tagName
 	 * @param {string} args.encodedContent
 	 */
-	constructor({ event, top, tagName, encodedContent }) {
+	constructor({ event, top, tagName, encodedContent, color }) {
 		this.bookmarkMessage = { tagName, encodedContent };
 		this.inputBox;
 		this.textarea;
 		this.visible = true;
 		this.top = top;
-		this.create({ top, tagName, encodedContent });
+		this.create({ top, tagName, encodedContent, color });
 	}
-	create = ({ tagName, encodedContent }) => {
+	create = ({ tagName, encodedContent, color }) => {
 		let memoIdx = bookmarkList[bookmarkIdx].markList[tagName].indexOf(encodedContent);
 		this.memo = bookmarkList[bookmarkIdx].memo[tagName][memoIdx];
 		this.inputBox = document.createElement("div");
@@ -22,6 +22,7 @@ class MemoInputBox {
 		this.inputBox.innerHTML += "<textarea placeholder='memo...'/>";
 		this.inputBox.classList.add("ct_bks_mm_ip_box");
 		this.inputBox.style.top = this.top;
+		this.inputBox.style.background = color;
 		this.textarea = this.inputBox.getElementsByTagName("textarea")[0];
 		this.textarea.value =
 			memoIdx >= 0 && this.memo != null ? this.memo.split("<br/>").join("\n") : "";
@@ -77,12 +78,12 @@ class MemoInputBox {
 }
 
 class MemoBox {
-	constructor({ tagName, encodedContent, top }) {
+	constructor({ tagName, encodedContent, top, color }) {
 		this.memoBox;
 		this.memo;
-		this.createMemoBox(tagName, encodedContent, top);
+		this.createMemoBox(tagName, encodedContent, top, color);
 	}
-	createMemoBox = (tagName, encodedContent, top) => {
+	createMemoBox = (tagName, encodedContent, top, color) => {
 		let memoIdx;
 		memoIdx = bookmarkList[bookmarkIdx].markList[tagName].indexOf(encodedContent);
 		this.memo = bookmarkList[bookmarkIdx].memo[tagName][memoIdx];
@@ -90,6 +91,7 @@ class MemoBox {
 		document.body.append(this.memoBox);
 		this.memoBox.classList.add("ct_bks_mm_ip_box", "ct_bks_mm_box");
 		this.memoBox.style.top = `${top}px`;
+		this.memoBox.style.background = color;
 		if (!Boolean(this.memo)) {
 			this.memo = "memo...";
 			this.memoBox.style.color = "darkgray";

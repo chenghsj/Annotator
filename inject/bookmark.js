@@ -7,20 +7,25 @@ class Bookmark {
 	 * @param {string} args.encodedContent
 	 * @param {integer} args.top
 	 */
-	constructor({ tagName, encodedContent, top }) {
+	constructor({ tagName, encodedContent, top, color }) {
 		this.top = top;
 		this.tagName = tagName;
 		this.encodedContent = encodedContent;
-		this.createBookmark({ tagName, encodedContent });
+		this.createBookmark({ tagName, encodedContent, color });
 		this.tempBookmark;
 	}
-	createBookmark = ({ tagName, encodedContent }) => {
+	createBookmark = ({ tagName, encodedContent, color }) => {
 		let self = this;
+		let span;
 		this.bookmark = document.createElement("div");
 		this.bookmark.id = tagName + encodedContent;
 		this.bookmark.classList.add("ct_bks");
 		document.body.append(this.bookmark);
 		this.bookmark.style.top = `${this.top}px`;
+		this.bookmark.style.background = color;
+		span = document.createElement("span");
+		span.style.borderRightColor = color;
+		this.bookmark.append(span);
 
 		this.bookmark.addEventListener("click", async function (e) {
 			e.stopPropagation();
@@ -37,6 +42,7 @@ class Bookmark {
 				top: `${self.top}px`,
 				tagName,
 				encodedContent,
+				color: mm_bg_color,
 			});
 			this.tempBookmark = { tagName, encodedContent };
 		});
@@ -56,6 +62,7 @@ class Bookmark {
 					top: self.top,
 					tagName: self.tagName,
 					encodedContent: self.encodedContent,
+					color: mm_bg_color,
 				});
 			}, delay);
 		});

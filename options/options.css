@@ -41,6 +41,7 @@ button {
     padding: 3px 10px;
     width: 65px;
     height: 25px;
+    cursor: pointer;
 }
 
 button:hover{
@@ -117,4 +118,11 @@ button:active{
 }
 #cancel_btn:active {
     background: rgba(100, 100, 100, 0.80);
+}
+
+#reset_btn {
+    margin-left: 10px;
+    text-decoration: underline;
+    color: #7d8cff;
+    cursor: pointer;
 }
