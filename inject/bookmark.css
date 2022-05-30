@@ -23,8 +23,8 @@
 
 .ct_bks_mm_ip_box{
     position: absolute;
-    height: 150px;
-    width: 200px;
+    height: 250px;
+    width: 260px;
     right: 25px;
     padding: 5px;
     background: #ffff8a;
@@ -38,7 +38,7 @@
 .ct_bks_mm_ip_box.ct_bks_mm_box{
     height: fit-content;
     width: fit-content;
-    max-width: 200px;
+    max-width: 260px;
     padding: 10px;
     background: #ffff8a;
     overflow-wrap: break-word;
