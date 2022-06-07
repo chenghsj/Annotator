@@ -145,7 +145,7 @@ async function content_bookmark_popup_init() {
 				ael(li, "click", function () {});
 				ael(rm_memo_btn, "click", async function () {
 					let self = this;
-					console.log("clicked");
+					// console.log("clicked");
 					document.getElementById(li.id).remove();
 					let memoIdx = tempBookmarkList[i].markList[this.dataset.tagName].indexOf(
 						this.dataset.encodedContent
@@ -161,7 +161,7 @@ async function content_bookmark_popup_init() {
 						tempBookmarkList.splice(i, 1);
 						document.getElementById(ulContainer.id).remove();
 					}
-					console.log(tempBookmarkList);
+					// console.log(tempBookmarkList);
 					setThanRemove({
 						list: tempBookmarkList,
 						query: {},
@@ -192,7 +192,7 @@ async function content_bookmark_popup_init() {
 			tempBookmarkList = tempBookmarkList.filter((item) => item.url !== this.dataset.url);
 			e.stopPropagation();
 			document.getElementById(ulContainer.id).remove();
-			console.log(tempBookmarkList);
+			// console.log(tempBookmarkList);
 			setThanRemove({ list: tempBookmarkList, query: {}, url: this.dataset.url, data: null });
 		});
 		collapse_btn = titleContainer.getElementsByClassName("bk_mm_collapse_container")[0];
@@ -213,7 +213,7 @@ async function content_bookmark_popup_init() {
 		ulContainer.append(titleContainer, ul);
 		bk_container.append(ulContainer);
 	}
-	console.log(bookmarkList);
+	// console.log(bookmarkList);
 
 	ael(ct_bk_search, "keyup", function (e) {
 		if (searchTimeoutId) {

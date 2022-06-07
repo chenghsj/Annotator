@@ -30,7 +30,7 @@ var bm_bg_color, ct_bg_color, mm_bg_color;
 /**
  * @instance MemoInputBox
  */
-var memoInputBox, memoBox, savedMemo, cursorIcon;
+var memoInputBox, memoBox, savedMemo;
 
 function getAllStorageLocalData() {
 	return new Promise((resolve, reject) => {
@@ -72,12 +72,6 @@ async function findDOMPositions(args) {
 	return findDOMPositions.default(args);
 }
 
-async function cursorIcon(args) {
-	let cursorIconSrc = chrome.runtime.getURL("inject/cursorIcon.js"),
-		cursorIcon = await import(cursorIconSrc);
-	return new cursorIcon.default(args);
-}
-
 async function bookmarkInit() {
 	let items = await getAllStorageLocalData();
 
@@ -86,7 +80,7 @@ async function bookmarkInit() {
 	mm_bg_color = items.colorList.mm_bg_color || "#ffff8a";
 
 	bookmarkList = items.bookmarkList || [];
-	console.log("Get Storage Data: ", bookmarkList);
+	// console.log("Get Storage Data: ", bookmarkList);
 	bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
 	if (bookmarkIdx < 0) return;
 	scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
@@ -95,7 +89,7 @@ async function bookmarkInit() {
 			bookmarkInit();
 		}, 200);
 	}
-	console.log(scrollPositions);
+	// console.log(scrollPositions);
 }
 
 chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
@@ -168,7 +162,7 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 	bookmarkList = items.bookmarkList || [];
 	if (message.message === sendMessageList.SCROLL_TO_POSITION) {
 		await bookmarkInit();
-		console.log(message.tab);
+		// console.log(message.tab);
 		let position = await findDOMPositions({
 			bookmarkList,
 			tabUrl: message.tab.url,
@@ -220,8 +214,8 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 		}
 		scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
 		chrome.storage.local.set({ bookmarkList });
-		console.log(scrollPositions);
-		console.log("Save to Storage", bookmarkList);
+		// console.log(scrollPositions);
+		// console.log("Save to Storage", bookmarkList);
 	}
 	sendResponse();
 	return true;
@@ -255,7 +249,7 @@ window.addEventListener("scroll", function (e) {
 		} else {
 			scrollPositionIdx = absScrollPositions.indexOf(min);
 		}
-		console.log(min, max, scrollPositionIdx, scrollPositions);
+		// console.log(min, max, scrollPositionIdx, scrollPositions);
 	}, delay);
 });
 
@@ -287,18 +281,18 @@ window.addEventListener("resize", function () {
 	}
 	contentBookmarkTimeoutId = setTimeout(function () {
 		bookmarkInit();
-		console.log(scrollPositions);
+		// console.log(scrollPositions);
 	}, delay);
 });
 
 window.addEventListener("mouseup", function (e) {
-	console.log(e);
+	// console.log(e);
 	getSelectedText();
 });
 
 window.addEventListener("click", function (e) {
 	memoInputBox?.remove();
-	console.log("click");
+	// console.log("click");
 });
 
 window.addEventListener("mouseenter", function (e) {
@@ -312,7 +306,7 @@ window.addEventListener("save_content_bookmark_memo", function (e) {
 		let memoIdx = bookmarkList[bookmarkIdx]?.markList[tagName].indexOf(encodedContent);
 		bookmarkList[bookmarkIdx].memo[tagName][memoIdx] = savedMemo;
 		chrome.storage.local.set({ bookmarkList });
-		console.log("Save to Storage", bookmarkList);
+		// console.log("Save to Storage", bookmarkList);
 	}
 });
 
@@ -320,7 +314,7 @@ function getSelectedText() {
 	if (window.getSelection) {
 		selectedText = window.getSelection().toString();
 		if (window.getSelection().toString().replace(/\s/g, "") && selectedText !== prevSelectedText) {
-			console.log(window.getSelection().toString());
+			// console.log(window.getSelection().toString());
 			prevSelectedText = selectedText;
 		}
 		return;
@@ -342,7 +336,7 @@ function logSelection(event) {
 		sel.removeAllRanges();
 		sel.addRange(range);
 	}
-	console.log(sel.anchorNode);
+	// console.log(sel.anchorNode);
 	// Colorize text
 	document.execCommand("backColor", false, "yellow");
 	// Set design mode to off

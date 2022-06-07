@@ -17,7 +17,7 @@ var resetBtn = document.getElementById("reset_btn");
 
 inputList.forEach((el) => {
 	el.addEventListener("change", function (e) {
-		console.log(colorList);
+		// console.log(colorList);
 		colorList[e.target.id] = e.target.value;
 	});
 });
@@ -31,14 +31,14 @@ resetBtn.addEventListener("click", function (e) {
 		bm_bg_color: "#808eff",
 		mm_bg_color: "#ffff8a",
 	};
-	console.log("clicked");
+	// console.log("clicked");
 });
 
 function content_bookmark_init() {
 	chrome.storage.local.get(
 		{ colorList: { ct_bg_color: "#e5fffb", bm_bg_color: "#808eff", mm_bg_color: "#ffff8a" } },
 		function (items) {
-			console.log(items);
+			// console.log(items);
 			inputList.forEach((el) => {
 				el.value = items.colorList[el.id];
 			});
@@ -72,7 +72,7 @@ function reload_tabs() {
 	confirmBtn.addEventListener("click", function () {
 		let query = reloadType.value == "current" ? { currentWindow: true } : {};
 		chrome.tabs.query(query, function (tabs) {
-			console.log(tabs);
+			// console.log(tabs);
 			tabs.forEach((tab) => {
 				chrome.tabs.reload(tab.id);
 			});

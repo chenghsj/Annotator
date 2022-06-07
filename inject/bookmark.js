@@ -57,7 +57,7 @@ class Bookmark {
 		this.bookmark.addEventListener("mouseenter", function () {
 			if (memoInputBox?.visible) return;
 			contentBookmarkMouseenterTimeoutId = setTimeout(() => {
-				console.log("mouse enter");
+				// console.log("mouse enter");
 				memoBox = new MemoBox({
 					top: self.top,
 					tagName: self.tagName,

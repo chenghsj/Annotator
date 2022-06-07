@@ -12,12 +12,4 @@ mark | shortcut |
 * Remove memo in popup page.
 * Custom color in options page.
 
-### TODO
-
-* [X] popup search filter
-
-* [ ] selection icon besides cursor
-
-* [X] options page preview
-  
-* [ ] popup memo clickable
+chrome extension: https://chrome.google.com/webstore/detail/content-bookmark/hofngheikljnkeimmabnfoglecepdhfj?hl=zh-TW&authuser=0
