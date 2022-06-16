@@ -22,7 +22,9 @@
 				"inject/bookmark.js",
 				"inject/findDOMPositions.js",
 				"inject/sendMessageList.js",
-				"helper/detectNodeType.js"
+				"helper/detectNodeType.js",
+				"inject/data/globalData.js",
+				"inject/data/globalDataProxy.js"
 			],
 			"matches": ["<all_urls>"]
 		}

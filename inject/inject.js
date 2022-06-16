@@ -1,9 +1,4 @@
-/**
- * @global
- */
-var bookmarkList,
-	bookmarkIdx,
-	currentURL = window.location.href,
+var currentURL = window.location.href,
 	scrollPositions = [],
 	scrollPositionIdx = -1,
 	scrollBehavior = "smooth";
@@ -19,18 +14,9 @@ var contentBookmarkTimeoutId = null,
 var selectedText = "",
 	prevSelectedText = "";
 
-var bookmarkStyle = {
-	background: "#fffdb1",
-};
-
 var sendMessageList;
 
-var bm_bg_color, ct_bg_color, mm_bg_color;
-
-/**
- * @instance MemoInputBox
- */
-var memoInputBox, memoBox, savedMemo;
+let globalData;
 
 function getAllStorageLocalData() {
 	return new Promise((resolve, reject) => {
@@ -60,6 +46,12 @@ function detectNodeType({ node, type }) {
 	return false;
 }
 
+async function getGlobalData() {
+	let globalDataProxySrc = chrome.runtime.getURL("inject/data/globalDataProxy.js"),
+		globalDataProxy = await import(globalDataProxySrc);
+	return globalDataProxy.default.getInstance();
+}
+
 async function getSendMessageList() {
 	let sendMessageListSrc = chrome.runtime.getURL("inject/sendMessageList.js"),
 		sendMessageList = await import(sendMessageListSrc);
@@ -73,17 +65,18 @@ async function findDOMPositions(args) {
 }
 
 async function bookmarkInit() {
+	globalData = await getGlobalData();
 	let items = await getAllStorageLocalData();
 
-	bm_bg_color = items.colorList.bm_bg_color || "#808eff";
-	ct_bg_color = items.colorList.ct_bg_color || "#e5fffb";
-	mm_bg_color = items.colorList.mm_bg_color || "#ffff8a";
+	globalData.bm_bg_color = items.colorList?.bm_bg_color || "#808eff";
+	globalData.ct_bg_color = items.colorList?.ct_bg_color || "#e5fffb";
+	globalData.mm_bg_color = items.colorList?.mm_bg_color || "#ffff8a";
 
-	bookmarkList = items.bookmarkList || [];
+	globalData.bookmarkList = items.bookmarkList || [];
 	// console.log("Get Storage Data: ", bookmarkList);
-	bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
-	if (bookmarkIdx < 0) return;
-	scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
+	globalData.bookmarkIdx = globalData.bookmarkList.findIndex((item) => item.url === currentURL);
+	if (globalData.bookmarkIdx < 0) return;
+	scrollPositions = await findDOMPositions({ bookmarkList: globalData.bookmarkList, tabUrl: currentURL });
 	if (scrollPositions.length === 0) {
 		setTimeout(() => {
 			bookmarkInit();
@@ -122,15 +115,15 @@ async function removeBookMark({ tagName, encodedContent, all, url }) {
 		bgAttr.style.background = "inherit";
 		delete bgAttr.dataset.encodedContent;
 	}
-	memoInputBox?.remove();
-	memoBox?.remove();
-	scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: url });
+	globalData.memoInputBox?.remove();
+	globalData.memoBox?.remove();
+	scrollPositions = await findDOMPositions({ bookmarkList: globalData.bookmarkList, tabUrl: url });
 }
 
 // remove bookmark when the current page is active
 async function editBookmarkWithinPage({ tagName, encodedContent }) {
-	let markList = bookmarkList[bookmarkIdx].markList;
-	let memo = bookmarkList[bookmarkIdx].memo;
+	let markList = globalData.bookmarkList[globalData.bookmarkIdx].markList;
+	let memo = globalData.bookmarkList[globalData.bookmarkIdx].memo;
 	// check if tagName exists
 	if (markList[tagName]) {
 		let encodedIdx = markList[tagName].indexOf(encodedContent);
@@ -147,7 +140,7 @@ async function editBookmarkWithinPage({ tagName, encodedContent }) {
 				delete memo[tagName];
 			}
 			if (Object.keys(markList).length === 0) {
-				bookmarkList.splice(bookmarkIdx, 1);
+				globalData.bookmarkList.splice(globalData.bookmarkIdx, 1);
 			}
 		}
 	} else {
@@ -157,14 +150,15 @@ async function editBookmarkWithinPage({ tagName, encodedContent }) {
 }
 
 chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+	globalData = await getGlobalData();
 	sendMessageList = await getSendMessageList();
 	let items = await getAllStorageLocalData();
-	bookmarkList = items.bookmarkList || [];
+	globalData.bookmarkList = items.bookmarkList || [];
 	if (message.message === sendMessageList.SCROLL_TO_POSITION) {
 		await bookmarkInit();
 		// console.log(message.tab);
 		let position = await findDOMPositions({
-			bookmarkList,
+			bookmarkList: globalData.bookmarkList,
 			tabUrl: message.tab.url,
 			contentFromPopup: message.contentFromPopup,
 		});
@@ -199,12 +193,12 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 			encodedSelectedContent.slice(0, 20).join(""),
 			encodedSelectedContent.slice(-20).join(""),
 		].join("");
-		bookmarkIdx = bookmarkList.findIndex((item) => item.url === currentURL);
+		globalData.bookmarkIdx = globalData.bookmarkList.findIndex((item) => item.url === currentURL);
 		// check if url exists
-		if (bookmarkIdx >= 0) {
+		if (globalData.bookmarkIdx >= 0) {
 			editBookmarkWithinPage({ tagName: selectedElement.tagName, encodedContent });
 		} else {
-			bookmarkList.push({
+			globalData.bookmarkList.push({
 				title: document.querySelector("title").innerText,
 				url: currentURL,
 				iconUrl: tab.favIconUrl,
@@ -212,8 +206,8 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 				memo: { [selectedElement.tagName]: [null] },
 			});
 		}
-		scrollPositions = await findDOMPositions({ bookmarkList, tabUrl: currentURL });
-		chrome.storage.local.set({ bookmarkList });
+		scrollPositions = await findDOMPositions({ bookmarkList: globalData.bookmarkList, tabUrl: currentURL });
+		chrome.storage.local.set({ bookmarkList: globalData.bookmarkList });
 		// console.log(scrollPositions);
 		// console.log("Save to Storage", bookmarkList);
 	}
@@ -275,7 +269,7 @@ window.addEventListener("keydown", function (e) {
 });
 
 window.addEventListener("resize", function () {
-	if (memoInputBox?.visible) memoInputBox.remove();
+	if (globalData.memoInputBox?.visible) globalData.memoInputBox.remove();
 	if (contentBookmarkTimeoutId) {
 		clearTimeout(contentBookmarkTimeoutId);
 	}
@@ -291,21 +285,21 @@ window.addEventListener("mouseup", function (e) {
 });
 
 window.addEventListener("click", function (e) {
-	memoInputBox?.remove();
+	globalData.memoInputBox?.remove();
 	// console.log("click");
 });
 
 window.addEventListener("mouseenter", function (e) {
-	memoBox?.remove();
+	globalData.memoBox?.remove();
 });
 
 window.addEventListener("save_content_bookmark_memo", function (e) {
-	savedMemo = e.detail.memo;
-	let { tagName, encodedContent } = memoInputBox.bookmarkMessage;
-	if (bookmarkList[bookmarkIdx] && bookmarkList[bookmarkIdx].markList) {
-		let memoIdx = bookmarkList[bookmarkIdx]?.markList[tagName].indexOf(encodedContent);
-		bookmarkList[bookmarkIdx].memo[tagName][memoIdx] = savedMemo;
-		chrome.storage.local.set({ bookmarkList });
+	globalData.savedMemo = e.detail.memo;
+	let { tagName, encodedContent } = globalData.memoInputBox.bookmarkMessage;
+	if (globalData.bookmarkList[globalData.bookmarkIdx] && globalData.bookmarkList[globalData.bookmarkIdx].markList) {
+		let memoIdx = globalData.bookmarkList[globalData.bookmarkIdx]?.markList[tagName].indexOf(encodedContent);
+		globalData.bookmarkList[globalData.bookmarkIdx].memo[tagName][memoIdx] = globalData.savedMemo;
+		chrome.storage.local.set({ bookmarkList: globalData.bookmarkList });
 		// console.log("Save to Storage", bookmarkList);
 	}
 });

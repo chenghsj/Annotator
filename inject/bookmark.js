@@ -1,3 +1,4 @@
+import GlobalDataProxy from './data/globalDataProxy.js';
 import { MemoInputBox, MemoBox } from "./memo.js";
 
 class Bookmark {
@@ -15,6 +16,7 @@ class Bookmark {
 		this.tempBookmark;
 	}
 	createBookmark = ({ tagName, encodedContent, color }) => {
+		let globalData = GlobalDataProxy.getInstance();
 		let self = this;
 		let span;
 		this.bookmark = document.createElement("div");
@@ -30,45 +32,45 @@ class Bookmark {
 		this.bookmark.addEventListener("click", async function (e) {
 			e.stopPropagation();
 			if (
-				memoInputBox?.visible &&
+				globalData.memoInputBox?.visible &&
 				this.tempBookmark &&
-				deepEqual(memoInputBox.bookmarkMessage, this.tempBookmark)
+				deepEqual(globalData.memoInputBox.bookmarkMessage, this.tempBookmark)
 			)
 				return;
-			memoInputBox?.remove();
-			memoBox?.remove();
-			memoInputBox = new MemoInputBox({
+			globalData.memoInputBox?.remove();
+			globalData.memoBox?.remove();
+			globalData.memoInputBox = new MemoInputBox({
 				event: e,
 				top: `${self.top}px`,
 				tagName,
 				encodedContent,
-				color: mm_bg_color,
+				color: globalData.mm_bg_color,
 			});
 			this.tempBookmark = { tagName, encodedContent };
 		});
 		this.bookmark.addEventListener("dblclick", function (e) {
 			//   removeBookMark({ tagName: self.tagName, encodedContent: self.encodedContent });
 			editBookmarkWithinPage({ tagName: self.tagName, encodedContent: self.encodedContent });
-			chrome.storage.local.set({ bookmarkList });
+			chrome.storage.local.set({ bookmarkList: globalData.bookmarkList});
 			this.remove();
-			memoInputBox?.remove();
-			memoBox?.remove();
+			globalData.memoInputBox?.remove();
+			globalData.memoBox?.remove();
 		});
 		this.bookmark.addEventListener("mouseenter", function () {
-			if (memoInputBox?.visible) return;
+			if (globalData.memoInputBox?.visible) return;
 			contentBookmarkMouseenterTimeoutId = setTimeout(() => {
 				// console.log("mouse enter");
-				memoBox = new MemoBox({
+				globalData.memoBox = new MemoBox({
 					top: self.top,
 					tagName: self.tagName,
 					encodedContent: self.encodedContent,
-					color: mm_bg_color,
+					color: globalData.mm_bg_color,
 				});
 			}, delay);
 		});
 		this.bookmark.addEventListener("mouseleave", function () {
 			if (contentBookmarkMouseenterTimeoutId) {
-				memoBox?.remove();
+				globalData.memoBox?.remove();
 				clearTimeout(contentBookmarkMouseenterTimeoutId);
 			}
 		});

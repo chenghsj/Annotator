@@ -1,3 +1,5 @@
+import GlobalDataProxy from './data/globalDataProxy.js';
+
 class MemoInputBox {
 	/**
 	 * @param {object} args
@@ -15,8 +17,9 @@ class MemoInputBox {
 		this.create({ top, tagName, encodedContent, color });
 	}
 	create = ({ tagName, encodedContent, color }) => {
-		let memoIdx = bookmarkList[bookmarkIdx].markList[tagName].indexOf(encodedContent);
-		this.memo = bookmarkList[bookmarkIdx].memo[tagName][memoIdx];
+		let globalData = GlobalDataProxy.getInstance();
+		let memoIdx = globalData.bookmarkList[globalData.bookmarkIdx].markList[tagName].indexOf(encodedContent);
+		this.memo = globalData.bookmarkList[globalData.bookmarkIdx].memo[tagName][memoIdx];
 		this.inputBox = document.createElement("div");
 		document.body.append(this.inputBox);
 		this.inputBox.innerHTML += "<textarea placeholder='memo...'/>";
@@ -84,9 +87,10 @@ class MemoBox {
 		this.createMemoBox(tagName, encodedContent, top, color);
 	}
 	createMemoBox = (tagName, encodedContent, top, color) => {
+		let globalData = GlobalDataProxy.getInstance();
 		let memoIdx;
-		memoIdx = bookmarkList[bookmarkIdx].markList[tagName].indexOf(encodedContent);
-		this.memo = bookmarkList[bookmarkIdx].memo[tagName][memoIdx];
+		memoIdx = globalData.bookmarkList[globalData.bookmarkIdx].markList[tagName].indexOf(encodedContent);
+		this.memo = globalData.bookmarkList[globalData.bookmarkIdx].memo[tagName][memoIdx];
 		this.memoBox = document.createElement("div");
 		document.body.append(this.memoBox);
 		this.memoBox.classList.add("ct_bks_mm_ip_box", "ct_bks_mm_box");

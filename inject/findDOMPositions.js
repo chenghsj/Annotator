@@ -1,10 +1,12 @@
+import GlobalDataProxy from './data/globalDataProxy.js';
 import Bookmark from "./bookmark.js";
 
 function findDOMPositions({ bookmarkList, tabUrl, contentFromPopup }) {
+	let globalData = GlobalDataProxy.getInstance();
 	let markList;
-	bookmarkIdx = bookmarkList.findIndex((item) => item.url === tabUrl);
-	if (bookmarkIdx < 0) return;
-	markList = bookmarkList[bookmarkIdx].markList;
+	globalData.bookmarkIdx = bookmarkList.findIndex((item) => item.url === tabUrl);
+	if (globalData.bookmarkIdx < 0) return;
+	markList = bookmarkList[globalData.bookmarkIdx].markList;
 	let positions = [];
 	let contentFromPopupPosition;
 	for (let tagName in markList) {
@@ -30,10 +32,10 @@ function findDOMPositions({ bookmarkList, tabUrl, contentFromPopup }) {
 						tagName,
 						encodedContent,
 						top: getOffsetTop(item) + 100,
-						color: bm_bg_color,
+						color: globalData.bm_bg_color,
 					});
 					item.classList.add("ct_bks_bg");
-					item.style.background = ct_bg_color;
+					item.style.background = globalData.ct_bg_color;
 					item.dataset.encodedContent = encodedContent;
 					positions.push(getOffsetTop(item));
 					tempMarkList[idx] = null;
