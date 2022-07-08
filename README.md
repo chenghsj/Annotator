@@ -12,4 +12,5 @@ mark | shortcut |
 * Remove memo in popup page.
 * Custom color in options page.
 
-chrome extension: https://chrome.google.com/webstore/detail/content-bookmark/hofngheikljnkeimmabnfoglecepdhfj?hl=zh-TW&authuser=0
+chrome extension: https://chrome.google.com/webstore/detail/content-bookmark/hofngheikljnkeimmabnfoglecepdhfj?hl=zh-TW&authuser=0<br>
+edge extension: https://microsoftedge.microsoft.com/addons/detail/content-bookmark/kgkcledehdchjfclkdnncodicbbljkop
