@@ -1,9 +1,9 @@
 {
 	"manifest_version": 3,
 
-	"name": "Content Bookmark",
-	"description": "Add bookmarks inside pages",
-	"version": "1.0.2",
+	"name": "Annotator",
+	"description": "Add bookmark and note inside pages",
+	"version": "1.0.3",
 	"icons": {
 		"128": "icon.png"
 	},

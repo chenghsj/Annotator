@@ -12,7 +12,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 chrome.runtime.onInstalled.addListener(() => {
 	chrome.contextMenus.create({
-		title: "Content Bookmark",
+		title: "Annotator",
 		id: "add-bookmark",
 		contexts: ["selection"],
 	});

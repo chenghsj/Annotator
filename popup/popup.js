@@ -74,24 +74,21 @@ async function setThanRemove({ list, query, url, data }) {
 async function directToTab(bookmarkList, idx, contentFromPopup) {
 	let tabs = await tabsQuery({ currentWindow: true });
 	let tabIdx = tabs.findIndex((tab) => tab.url === bookmarkList[idx].url);
+
 	if (tabIdx >= 0) {
 		if (tabs[tabIdx].active) {
 			// window.close();
+			chrome.tabs.sendMessage(
+				tabs[tabIdx]?.id,
+				{ message: sendMessageList.SCROLL_TO_POSITION, tab: tabs[tabIdx], contentFromPopup },
+				(response) => {}
+			);
 		} else {
 			chrome.tabs.update(tabs[tabIdx].id, { active: true }, function () {});
 		}
 	} else {
-		chrome.runtime.sendMessage({
-			message: sendMessageList.SCROLL_TO_POSITION,
-			contentFromPopup,
-			tabUrl: bookmarkList[idx].url,
-		});
+		chrome.tabs.create({ url: bookmarkList[idx].url });
 	}
-	chrome.tabs.sendMessage(
-		tabs[tabIdx].id,
-		{ message: sendMessageList.SCROLL_TO_POSITION, tab: tabs[tabIdx], contentFromPopup },
-		(response) => {}
-	);
 }
 
 async function content_bookmark_popup_init() {

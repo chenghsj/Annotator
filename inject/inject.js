@@ -76,7 +76,10 @@ async function bookmarkInit() {
 	// console.log("Get Storage Data: ", bookmarkList);
 	globalData.bookmarkIdx = globalData.bookmarkList.findIndex((item) => item.url === currentURL);
 	if (globalData.bookmarkIdx < 0) return;
-	scrollPositions = await findDOMPositions({ bookmarkList: globalData.bookmarkList, tabUrl: currentURL });
+	scrollPositions = await findDOMPositions({
+		bookmarkList: globalData.bookmarkList,
+		tabUrl: currentURL,
+	});
 	if (scrollPositions.length === 0) {
 		setTimeout(() => {
 			bookmarkInit();
@@ -157,12 +160,16 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 	if (message.message === sendMessageList.SCROLL_TO_POSITION) {
 		await bookmarkInit();
 		// console.log(message.tab);
-		let position = await findDOMPositions({
-			bookmarkList: globalData.bookmarkList,
-			tabUrl: message.tab.url,
-			contentFromPopup: message.contentFromPopup,
-		});
-		window.scrollTo({ top: position, behavior: scrollBehavior });
+		if (message.contentFromPopup) {
+			let position = await findDOMPositions({
+				bookmarkList: globalData.bookmarkList,
+				tabUrl: message.tab.url,
+				contentFromPopup: message.contentFromPopup,
+			});
+			window.scrollTo({ top: position, behavior: scrollBehavior });
+		} else {
+			window.scrollTo({ top: 0, behavior: scrollBehavior });
+		}
 	}
 	if (message.message === sendMessageList.UPDATE_TAB) {
 		if (message.data == null) {
@@ -206,7 +213,10 @@ chrome.runtime.onMessage.addListener(async function (message, sender, sendRespon
 				memo: { [selectedElement.tagName]: [null] },
 			});
 		}
-		scrollPositions = await findDOMPositions({ bookmarkList: globalData.bookmarkList, tabUrl: currentURL });
+		scrollPositions = await findDOMPositions({
+			bookmarkList: globalData.bookmarkList,
+			tabUrl: currentURL,
+		});
 		chrome.storage.local.set({ bookmarkList: globalData.bookmarkList });
 		// console.log(scrollPositions);
 		// console.log("Save to Storage", bookmarkList);
@@ -296,8 +306,12 @@ window.addEventListener("mouseenter", function (e) {
 window.addEventListener("save_content_bookmark_memo", function (e) {
 	globalData.savedMemo = e.detail.memo;
 	let { tagName, encodedContent } = globalData.memoInputBox.bookmarkMessage;
-	if (globalData.bookmarkList[globalData.bookmarkIdx] && globalData.bookmarkList[globalData.bookmarkIdx].markList) {
-		let memoIdx = globalData.bookmarkList[globalData.bookmarkIdx]?.markList[tagName].indexOf(encodedContent);
+	if (
+		globalData.bookmarkList[globalData.bookmarkIdx] &&
+		globalData.bookmarkList[globalData.bookmarkIdx].markList
+	) {
+		let memoIdx =
+			globalData.bookmarkList[globalData.bookmarkIdx]?.markList[tagName].indexOf(encodedContent);
 		globalData.bookmarkList[globalData.bookmarkIdx].memo[tagName][memoIdx] = globalData.savedMemo;
 		chrome.storage.local.set({ bookmarkList: globalData.bookmarkList });
 		// console.log("Save to Storage", bookmarkList);
