@@ -14,3 +14,13 @@ mark | shortcut |
 
 chrome extension: https://chrome.google.com/webstore/detail/content-bookmark/hofngheikljnkeimmabnfoglecepdhfj?hl=zh-TW&authuser=0<br>
 edge extension: https://microsoftedge.microsoft.com/addons/detail/content-bookmark/kgkcledehdchjfclkdnncodicbbljkop
+
+<br>
+<br>
+TODO:
+
+* custom color opacity
+* custom scroll behavior
+* custom different colors for different collections
+* filter by color within popup page
+
