@@ -1,4 +1,4 @@
-# Content bookmark
+# Annotator
 
 * Mark content inside pages.
 * Scroll to mark position with shortcut
