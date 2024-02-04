@@ -23,4 +23,5 @@ TODO:
 * custom scroll behavior
 * custom different colors for different collections
 * filter by color within popup page
+* dark mode color
 
