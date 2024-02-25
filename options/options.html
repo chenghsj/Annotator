@@ -1,54 +1,134 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>My Test Extension Options</title>
+  </head>
+  <link rel="stylesheet" href="options.css" />
+  <link rel="stylesheet" href="../inject/bookmark.css" />
 
-<head>
-  <title>My Test Extension Options</title>
-</head>
-<link rel="stylesheet" href="options.css">
+  <body>
+    <div class="options_container">
+      <div class="color_setting_container">
+        <div style="flex: 1">
+          <h3>Color Setting</h3>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Color</th>
+                <th>Opacity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Highlight Background</td>
+                <td><input id="ct_bg_color" type="color" /></td>
+                <td>
+                  <input
+                    id="ct_bg_color_alpha"
+                    type="number"
+                    value="1"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Highlight Text</td>
+                <td><input id="ct_text_color" type="color" /></td>
+              </tr>
+              <tr>
+                <td>Bookmark</td>
+                <td><input id="bm_bg_color" type="color" /></td>
+                <td>
+                  <input
+                    id="bm_bg_color_alpha"
+                    type="number"
+                    value="1"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Memo Background</td>
+                <td><input id="mm_bg_color" type="color" /></td>
+                <td>
+                  <input
+                    id="mm_bg_color_alpha"
+                    type="number"
+                    value="1"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Memo Text</td>
+                <td><input id="mm_text_color" type="color" /></td>
+                <td>
+                  <input
+                    id="mm_text_color_alpha"
+                    type="number"
+                    value="1"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="btn_container">
+            <button id="save">Save</button>
+            <span id="reset_btn">Reset</span>
+            <div id="status"></div>
+          </div>
+        </div>
 
-<body>
-  <div class="options_container">
-    <div>
-      <h3>Background color</h3>
-      <ul>
-        <li><span>Content&nbsp;:&emsp;</span><input id="ct_bg_color" type="color"></li>
-        <li><span>Bookmark&nbsp;:&emsp;</span><input id="bm_bg_color" type="color"></li>
-        <li><span>Memo&nbsp;:&emsp;</span><input id="mm_bg_color" type="color"></li>
-      </ul>
-      <div id="btn_container">
-        <button id="save">Save</button>
-        <span id="reset_btn">Reset</span>
-        <div id="status"></div>
+        <div style="flex: 1">
+          <h3>Preview</h3>
+          <div class="preview_container">
+            <span id="ct_bg_color_preview">
+              <span id="ct_text_color_preview">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, sequi.
+              </span>
+            </span>
+            <div class="ct_bks" id="bm_bg_color_preview">
+              <span></span>
+            </div>
+            <div class="ct_bks_mm_ip_box ct_bks_mm_box" id="mm_bg_color_preview">
+              <span id="mm_text_color_preview">text</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="reload_container">
+        <h3>Reload pages on your own or click button below:</h3>
+        <select id="reload_type">
+          <option value="current">Current window</option>
+          <option value="all">All windows</option>
+        </select>
+        <div class="btn_container">
+          <button id="reload_all">Reload</button>
+        </div>
       </div>
     </div>
 
-    <div class=""></div>
-
-    <div id="reload_container">
-      <h3>
-        Reload pages on your own or click button below:
-      </h3>
-      <select id="reload_type">
-        <option value="current">Current window</option>
-        <option value="all">All windows</option>
-      </select>
-      <button id="reload_all">Reload</button>
-    </div>
-  </div>
-
-
-  <div id="confirm_page_mask">
-    <div id="confirm_page">
-      <h3 id="confirm_message"></h3>
-      <div id="confirm_btn_container">
-        <button id="confirm_btn">Yes</button>
-        <button id="cancel_btn">No</button>
+    <div id="confirm_page_mask">
+      <div id="confirm_page">
+        <h3 id="confirm_message"></h3>
+        <div id="confirm_btn_container">
+          <button id="confirm_btn">Yes</button>
+          <button id="cancel_btn">No</button>
+        </div>
       </div>
     </div>
-  </div>
 
-
-  <script src="options.js"></script>
-</body>
-
+    <script src="options.js"></script>
+  </body>
 </html>

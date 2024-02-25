@@ -1,39 +1,40 @@
 {
-	"manifest_version": 3,
+  "manifest_version": 3,
 
-	"name": "Annotator",
-	"description": "Add bookmark and note inside pages",
-	"version": "1.0.3",
-	"icons": {
-		"128": "icon.png"
-	},
-	"background": {
-		"service_worker": "background.js",
-		"type": "module"
-	},
-	"options_ui": {
-		"page": "options/options.html",
-		"open_in_tab": false
-	},
-	"web_accessible_resources": [
-		{
-			"resources": [
-				"inject/memo.js",
-				"inject/bookmark.js",
-				"inject/findDOMPositions.js",
-				"inject/sendMessageList.js",
-				"helper/detectNodeType.js",
-				"inject/data/globalData.js",
-				"inject/data/globalDataProxy.js"
-			],
-			"matches": ["<all_urls>"]
-		}
-	],
-	"minimum_chrome_version": "92",
-	"action": {
-		"default_popup": "popup/popup.html",
-		"default_icon": "icon.png"
-	},
-	"permissions": ["tabs", "scripting", "storage", "contextMenus"],
-	"host_permissions": ["<all_urls>"]
+  "name": "Annotator",
+  "description": "Add bookmark and note inside pages",
+  "version": "1.0.4",
+  "icons": {
+    "128": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": false
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "inject/memo.js",
+        "inject/bookmark.js",
+        "inject/findDOMPositions.js",
+        "inject/sendMessageList.js",
+        "helper/detectNodeType.js",
+        "inject/data/globalData.js",
+        "inject/data/globalDataProxy.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "minimum_chrome_version": "92",
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icon.png"
+  },
+  "permissions": ["tabs", "scripting", "storage", "contextMenus"],
+  "optional_permissions": ["unlimitedStorage"],
+  "host_permissions": ["<all_urls>"]
 }

@@ -62,12 +62,28 @@ class GlobalDataProxy {
     this.globalData.ct_bg_color = value;
   }
 
+  get ct_text_color() {
+    return this.globalData.ct_text_color;
+  }
+
+  set ct_text_color(value) {
+    this.globalData.ct_text_color = value;
+  }
+
   get mm_bg_color() {
     return this.globalData.mm_bg_color;
   }
 
   set mm_bg_color(value) {
     this.globalData.mm_bg_color = value;
+  }
+
+  get mm_text_color() {
+    return this.globalData.mm_text_color;
+  }
+
+  set mm_text_color(value) {
+    this.globalData.mm_text_color = value;
   }
 
   static getInstance() {

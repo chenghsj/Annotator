@@ -1,70 +1,70 @@
 .ct_bks {
-    width: 13px;
-    height: 13px;
-    position: absolute;
-    background: rgb(0, 28, 243, 52%);  
-    right:0; 
-    cursor: pointer;
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  background: rgb(0, 28, 243, 52%);
+  right: 0;
+  cursor: pointer;
 }
 
-.ct_bks span{
-    content: "";
-    position: absolute;
-    border-top: 6.5px solid transparent;
-    border-bottom: 6.5px solid transparent;
-    border-right: 8px solid rgb(0, 28, 243, 52%);
-    left: -8px;
+.ct_bks span {
+  content: "";
+  position: absolute;
+  border-top: 6.5px solid transparent;
+  border-bottom: 6.5px solid transparent;
+  border-right: 8px solid rgb(0, 28, 243, 52%);
+  left: -8px;
 }
 
 .ct_bks_bg {
-    background: #adfff161;
-    /* background: #ffff8a; */
+  background: #adfff161;
+  /* background: #ffff8a; */
 }
 
-.ct_bks_mm_ip_box{
-    position: absolute;
-    height: 250px;
-    width: 260px;
-    right: 25px;
-    padding: 5px;
-    background: #ffff8a;
-    border-radius: 5px;
-    box-shadow: 1px 1px 4px 1px #5252525e;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    z-index: 1000!important;
+.ct_bks_mm_ip_box {
+  position: absolute;
+  height: 250px;
+  width: 260px;
+  right: 25px;
+  padding: 5px;
+  background: #ffff8a;
+  border-radius: 5px;
+  box-shadow: 1px 1px 4px 1px #5252525e;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  z-index: 1000 !important;
 }
 
-.ct_bks_mm_ip_box.ct_bks_mm_box{
-    height: fit-content;
-    width: fit-content;
-    max-width: 260px;
-    padding: 10px;
-    background: #ffff8a;
-    overflow-wrap: break-word;
-    font-size: 14px;
-    box-sizing: border-box;
+.ct_bks_mm_ip_box.ct_bks_mm_box {
+  height: fit-content;
+  width: fit-content;
+  max-width: 260px;
+  padding: 10px;
+  background: #ffff8a;
+  overflow-wrap: break-word;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-.ct_bks_mm_ip_box textarea{
-    font-size: 14px;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    background: transparent !important;
-    border: none !important;
-    border-radius: 5px;
-    padding: 10px;
-    resize: none;
-    box-sizing: border-box;
-    box-shadow: none !important;
+.ct_bks_mm_ip_box textarea {
+  font-size: 14px;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 5px;
+  padding: 10px;
+  resize: none;
+  box-sizing: border-box;
+  box-shadow: none !important;
 }
 
 .ct_bks_mm_ip_box textarea::placeholder {
-    color: darkgray;
+  color: darkgray;
 }
 
-.ct_bks_mm_ip_box textarea:focus-visible{
-    outline: none;
+.ct_bks_mm_ip_box textarea:focus-visible {
+  outline: none;
 }

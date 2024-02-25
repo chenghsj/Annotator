@@ -9,8 +9,12 @@ class GlobalData {
     this.bm_bg_color = null;
     // content background color
     this.ct_bg_color = null;
-    // memo color
+    // content text color
+    this.ct_text_color = null;
+    // memo background color
     this.mm_bg_color = null;
+    // memo text color
+    this.mm_text_color = null;
   }
 }
 
